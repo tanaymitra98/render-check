@@ -5,23 +5,6 @@ import os
 import requests
 from flask_cors import CORS
 import json
-import google.generativeai as genai
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
-
-# Configure Gemini API
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
-
-if not GEMINI_API_KEY:
-    print("Warning: GEMINI_API_KEY environment variable not set. Chat functionality will not work.")
-else:
-    try:
-        genai.configure(api_key=GEMINI_API_KEY)
-        print("Successfully configured Gemini API")
-    except Exception as e:
-        print(f"Error configuring Gemini API: {e}")
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
@@ -164,74 +147,9 @@ def test_lung_model():
 def home():
     return render_template('index.html')
 
-@app.route('/api/chat', methods=['POST'])
-def chat_with_gemini():
-    try:
-        print("Received chat request")
-        data = request.get_json()
-        if not data:
-            print("No JSON data received")
-            return jsonify({'error': 'No data provided'}), 400
-            
-        user_message = data.get('message', '').strip()
-        print(f"User message: {user_message}")
-        
-        if not user_message:
-            print("Empty message received")
-            return jsonify({'error': 'Empty message'}), 400
-            
-        if not GEMINI_API_KEY:
-            print("Gemini API key not configured")
-            return jsonify({
-                'error': 'Chat functionality is not available. Please contact support.'
-            }), 503
-            
-        try:
-            # Initialize the Gemini Flash 2.5 model
-            model = genai.GenerativeModel(
-                'gemini-1.5-flash',
-                generation_config={
-                    'temperature': 0.7,
-                    'max_output_tokens': 1024,
-                    'top_p': 0.9,
-                    'top_k': 40
-                },
-                safety_settings=[
-                    {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-                    {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-                    {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-                    {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}
-                ]
-            )
-            
-            # Create chat history
-            chat = model.start_chat(history=[])
-            
-            # Generate response with context
-            prompt = f"""You are a helpful health assistant. Provide clear, accurate, and concise responses about health topics. 
-            If you don't know something, say so. Never provide medical advice, only general information.
-            
-            User: {user_message}"""
-            
-            response = chat.send_message(prompt)
-            
-            print(f"Response generated: {response.text[:200]}...")
-            return jsonify({
-                'response': response.text
-            })
-            
-        except Exception as e:
-            print(f"Error in Gemini API call: {str(e)}")
-            return jsonify({
-                'error': f'Error processing your request: {str(e)}'
-            }), 500
-            
-    except Exception as e:
-        print(f"Unexpected error: {str(e)}")
-        return jsonify({
-            'error': 'An unexpected error occurred',
-            'details': str(e)
-        }), 500
+@app.route('/chat', methods=['POST'])
+def chat():
+    return jsonify({"error": "Chat functionality has been disabled"}), 501
 
 @app.route('/heart')
 def heart():
@@ -608,6 +526,6 @@ def create_app():
     return app
 
 if __name__ == '__main__':
-    app = create_app()
-    port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port, debug=not os.environ.get('RENDER'))
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

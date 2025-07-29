@@ -1,4 +1,3 @@
-
 * {
 margin: 0;
 padding: 0;
@@ -50,7 +49,6 @@ UI'
 ,
 'Cantarell'
 ,
-'Segoe
 sans-serif;
 font-size: 18px;
 line-height: 1.8;
@@ -64,8 +62,7 @@ position: relative;
 -moz-osx-font-smoothing: grayscale;
 text-rendering: optimizeLegibility;
 font-feature-settings: 'kern' 1,
-letter-spacing: 0.01em;
-'liga' 1;
+
 }
 /* Spline Background - Make sure it's positioned correctly
 */
