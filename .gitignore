@@ -1,0 +1,41 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# macOS system files
+.DS_Store
+__MACOSX/
+
+# Model files (ignored unless explicitly included)
+*.pkl
+
+# Uncomment to include specific models (if needed)
+#!diabetes_model.pkl
+#!heart_disease_model.pkl
+#!lung_cancer_model.pkl
+#!stroke_model.pkl
+
+# IDE/editor configs
+.vscode/
+.idea/
+
+# OS junk
+Thumbs.db
+
+# Log files
+*.log
+
+# Packaging
+*.egg-info/
+dist/
+build/
+
+# Testing
+.pytest_cache/
+.cache/
+
+# Jupyter
+.ipynb_checkpoints/

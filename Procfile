@@ -1,0 +1,1 @@
+web: gunicorn --worker-tmp-dir /dev/shm --timeout 120 --workers 4 --threads 8 --worker-class gthread app:app
